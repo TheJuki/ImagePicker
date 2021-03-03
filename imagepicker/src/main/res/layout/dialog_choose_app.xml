@@ -26,7 +26,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="@string/title_camera"
+            android:text="@string/imagepicker_title_camera"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/dialog_choose_text_color" />
 
@@ -51,7 +51,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
-            android:text="@string/title_gallery"
+            android:text="@string/imagepicker_title_gallery"
             android:textAppearance="@style/TextAppearance.AppCompat.Medium"
             android:textColor="@color/dialog_choose_text_color" />
 

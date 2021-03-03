@@ -5,8 +5,8 @@ import android.view.LayoutInflater
 import androidx.appcompat.app.AlertDialog
 import com.github.dhaval2404.imagepicker.R
 import com.github.dhaval2404.imagepicker.constant.ImageProvider
+import com.github.dhaval2404.imagepicker.databinding.DialogChooseAppBinding
 import com.github.dhaval2404.imagepicker.listener.ResultListener
-import kotlinx.android.synthetic.main.dialog_choose_app.view.*
 
 /**
  * Show Dialog
@@ -16,34 +16,34 @@ import kotlinx.android.synthetic.main.dialog_choose_app.view.*
  * @since 04 January 2018
  */
 internal object DialogHelper {
-
     /**
      * Show Image Provide Picker Dialog. This will streamline the code to pick/capture image
      *
      */
     fun showChooseAppDialog(context: Context, listener: ResultListener<ImageProvider>) {
         val layoutInflater = LayoutInflater.from(context)
-        val customView = layoutInflater.inflate(R.layout.dialog_choose_app, null)
+        val binding = DialogChooseAppBinding.inflate(layoutInflater)
+        val view = binding.root
 
         val dialog = AlertDialog.Builder(context)
             .setTitle(R.string.title_choose_image_provider)
-            .setView(customView)
+            .setView(view)
             .setOnCancelListener {
                 listener.onResult(null)
             }
-            .setNegativeButton(R.string.action_cancel) { _, _ ->
+            .setNegativeButton(R.string.imagepicker_action_cancel) { _, _ ->
                 listener.onResult(null)
             }
             .show()
 
         // Handle Camera option click
-        customView.lytCameraPick.setOnClickListener {
+        binding.lytCameraPick.setOnClickListener {
             listener.onResult(ImageProvider.CAMERA)
             dialog.dismiss()
         }
 
         // Handle Gallery option click
-        customView.lytGalleryPick.setOnClickListener {
+        binding.lytGalleryPick.setOnClickListener {
             listener.onResult(ImageProvider.GALLERY)
             dialog.dismiss()
         }

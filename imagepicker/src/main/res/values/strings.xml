@@ -1,10 +1,10 @@
 <resources>
-    <string name="app_name">Image Picker</string>
+    <string name="imagepicker_app_name">Image Picker</string>
 
     <string name="title_choose_image_provider">Choose</string>
-    <string name="action_cancel">Cancel</string>
-    <string name="title_gallery">Gallery</string>
-    <string name="title_camera">Camera</string>
+    <string name="imagepicker_action_cancel">Cancel</string>
+    <string name="imagepicker_title_gallery">Gallery</string>
+    <string name="imagepicker_title_camera">Camera</string>
 
     <string name="image_picker_provider_authority_suffix">.imagepicker.provider</string>
 

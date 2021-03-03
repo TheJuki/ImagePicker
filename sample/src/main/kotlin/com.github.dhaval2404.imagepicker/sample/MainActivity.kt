@@ -3,7 +3,6 @@ package com.github.dhaval2404.imagepicker.sample
 import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
@@ -12,12 +11,9 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import com.github.dhaval2404.imagepicker.ImagePicker
+import com.github.dhaval2404.imagepicker.sample.databinding.ActivityMainBinding
 import com.github.dhaval2404.imagepicker.sample.util.FileUtil
 import com.github.dhaval2404.imagepicker.sample.util.IntentUtil
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.content_camera_only.*
-import kotlinx.android.synthetic.main.content_gallery_only.*
-import kotlinx.android.synthetic.main.content_profile.*
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
@@ -31,15 +27,18 @@ class MainActivity : AppCompatActivity() {
         private const val CAMERA_IMAGE_REQ_CODE = 103
     }
 
+    private lateinit var binding: ActivityMainBinding
     private var mCameraFile: File? = null
     private var mGalleryFile: File? = null
     private var mProfileFile: File? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
-        imgProfile.setDrawableImage(R.drawable.ic_person, true)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        val view = binding.root
+        setContentView(view)
+        setSupportActionBar(binding.toolbar)
+        binding.main.contentProfile.imgProfile.setDrawableImage(R.drawable.ic_person, true)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -47,8 +46,8 @@ class MainActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
-    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
-        when (item?.itemId) {
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
             R.id.action_github -> {
                 IntentUtil.openURL(this, GITHUB_REPOSITORY)
                 return true
@@ -61,9 +60,6 @@ class MainActivity : AppCompatActivity() {
         ImagePicker.with(this)
             // Crop Square image
             .cropSquare()
-            .setImageProviderInterceptor { imageProvider -> // Intercept ImageProvider
-                Log.d("ImagePicker", "Selected ImageProvider: "+imageProvider.name)
-            }
             // Image resolution will be less than 512 x 512
             .maxResultSize(512, 512)
             .start(PROFILE_IMAGE_REQ_CODE)
@@ -75,14 +71,6 @@ class MainActivity : AppCompatActivity() {
             .crop()
             // User can only select image from Gallery
             .galleryOnly()
-
-            .galleryMimeTypes(  //no gif images at all
-                mimeTypes = arrayOf(
-                    "image/png",
-                    "image/jpg",
-                    "image/jpeg"
-                )
-            )
             // Image resolution will be less than 1080 x 1920
             .maxResultSize(1080, 1920)
             .start(GALLERY_IMAGE_REQ_CODE)
@@ -94,9 +82,6 @@ class MainActivity : AppCompatActivity() {
             .cameraOnly()
             // Image size will be less than 1024 KB
             .compress(1024)
-            .saveDir(Environment.getExternalStorageDirectory())
-            // .saveDir(Environment.getExternalStorageDirectory().absolutePath+File.separator+"ImagePicker")
-            // .saveDir(getExternalFilesDir(null)!!)
             .start(CAMERA_IMAGE_REQ_CODE)
     }
 
@@ -109,15 +94,15 @@ class MainActivity : AppCompatActivity() {
             when (requestCode) {
                 PROFILE_IMAGE_REQ_CODE -> {
                     mProfileFile = file
-                    imgProfile.setLocalImage(file, true)
+                    binding.main.contentProfile.imgProfile.setLocalImage(file, true)
                 }
                 GALLERY_IMAGE_REQ_CODE -> {
                     mGalleryFile = file
-                    imgGallery.setLocalImage(file)
+                    binding.main.contentGalleryOnly.imgGallery.setLocalImage(file)
                 }
                 CAMERA_IMAGE_REQ_CODE -> {
                     mCameraFile = file
-                    imgCamera.setLocalImage(file, false)
+                    binding.main.contentCameraOnly.imgCamera.setLocalImage(file, false)
                 }
             }
         } else if (resultCode == ImagePicker.RESULT_ERROR) {
@@ -129,9 +114,9 @@ class MainActivity : AppCompatActivity() {
 
     fun showImageCode(view: View) {
         val resource = when (view) {
-            imgProfileCode -> R.drawable.img_profile_code
-            imgCameraCode -> R.drawable.img_camera_code
-            imgGalleryCode -> R.drawable.img_gallery_code
+            binding.main.contentProfile.imgProfileCode -> R.drawable.img_profile_code
+            binding.main.contentCameraOnly.imgCameraCode -> R.drawable.img_camera_code
+            binding.main.contentGalleryOnly.imgGalleryCode -> R.drawable.img_gallery_code
             else -> 0
         }
         ImageViewerDialog.newInstance(resource).show(supportFragmentManager, "")
@@ -139,9 +124,9 @@ class MainActivity : AppCompatActivity() {
 
     fun showImage(view: View) {
         val file = when (view) {
-            imgProfile -> mProfileFile
-            imgCamera -> mCameraFile
-            imgGallery -> mGalleryFile
+            binding.main.contentProfile.imgProfile -> mProfileFile
+            binding.main.contentCameraOnly.imgCamera -> mCameraFile
+            binding.main.contentGalleryOnly.imgGallery -> mGalleryFile
             else -> null
         }
 
@@ -152,9 +137,9 @@ class MainActivity : AppCompatActivity() {
 
     fun showImageInfo(view: View) {
         val file = when (view) {
-            imgProfileInfo -> mProfileFile
-            imgCameraInfo -> mCameraFile
-            imgGalleryInfo -> mGalleryFile
+            binding.main.contentProfile.imgProfileInfo -> mProfileFile
+            binding.main.contentCameraOnly.imgCameraInfo -> mCameraFile
+            binding.main.contentGalleryOnly.imgGalleryInfo -> mGalleryFile
             else -> null
         }
 

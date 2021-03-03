@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
-import kotlinx.android.synthetic.main.dialog_imageviewer.*
+import com.github.dhaval2404.imagepicker.sample.databinding.DialogImageviewerBinding
 
 /**
  * Dialog to View Image
@@ -27,18 +27,21 @@ class ImageViewerDialog : DialogFragment() {
         }
     }
 
+    private var _binding: DialogImageviewerBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        val rootView = inflater.inflate(R.layout.dialog_imageviewer, container, false)
-        return rootView
+    ): View {
+        _binding = DialogImageviewerBinding.inflate(inflater, container, false)
+        return binding.root
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        codeImg.setImageResource(arguments?.getInt(EXTRA_IMAGE_RESOURCE, 0) ?: 0)
+        binding.codeImg.setImageResource(arguments?.getInt(EXTRA_IMAGE_RESOURCE, 0) ?: 0)
     }
 
     override fun onStart() {
@@ -49,5 +52,10 @@ class ImageViewerDialog : DialogFragment() {
             val height = ViewGroup.LayoutParams.WRAP_CONTENT
             it.window?.setLayout(width, height)
         }
+    }
+
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
     }
 }
